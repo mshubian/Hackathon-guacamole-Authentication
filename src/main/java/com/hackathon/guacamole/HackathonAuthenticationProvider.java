@@ -11,29 +11,27 @@ import org.glyptodon.guacamole.properties.IntegerGuacamoleProperty;
 import org.glyptodon.guacamole.properties.StringGuacamoleProperty;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 public class HackathonAuthenticationProvider extends SimpleAuthenticationProvider {
-
-    public static final long TEN_MINUTES = 10 * 60 * 1000;
+	
+	public static final Logger logger = Logger.getLogger(HackathonAuthenticationProvider.class.getClass());
+    private SignatureVerifier signatureVerifier;
+    private final TimeProviderInterface timeProvider;
 
     // Properties file params
     private static final StringGuacamoleProperty SECRET_KEY = new StringGuacamoleProperty() {
         @Override
         public String getName() { return "secret-key"; }
     };
-
     private static final StringGuacamoleProperty DEFAULT_PROTOCOL = new StringGuacamoleProperty() {
         @Override
         public String getName() { return "default-protocol"; }
     };
-
     private static final IntegerGuacamoleProperty TIMESTAMP_AGE_LIMIT = new IntegerGuacamoleProperty() {
         @Override
         public String getName() { return "timestamp-age-limit"; }
@@ -41,6 +39,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
 
     // these will be overridden by properties file if present
     private String defaultProtocol = "rdp";
+    public static final long TEN_MINUTES = 10 * 60 * 1000;
     private long timestampAgeLimit = TEN_MINUTES; // 10 minutes
 
     // Per-request params
@@ -49,22 +48,21 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
     public static final String TIMESTAMP_PARAM = "timestamp";
     public static final String PARAM_PREFIX = "guac.";
 
-    private static final List<String> SIGNED_PARAMETERS = new ArrayList<String>() {{
-        add("username");
-        add("password");
-        add("hostname");
-        add("port");
-    }};
+    private static final List<String> SIGNED_PARAMETERS = new ArrayList<String>() {
+    	{
+	        add("username");
+	        add("password");
+	        add("hostname");
+	        add("port");
+    	}
+    };
 
-    private SignatureVerifier signatureVerifier;
 
-    private final TimeProviderInterface timeProvider;
-
-    public HmacAuthenticationProvider(TimeProviderInterface timeProvider) {
+    public HackathonAuthenticationProvider(TimeProviderInterface timeProvider) {
         this.timeProvider = timeProvider;
+        logger.info("logger system init sucessed ");
     }
-
-    public HmacAuthenticationProvider() {
+    public HackathonAuthenticationProvider() {
         timeProvider = new DefaultTimeProvider();
     }
 
@@ -113,9 +111,14 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
         signature = signature.replace(' ', '+');
 
         String timestamp = request.getParameter(TIMESTAMP_PARAM);
-        if (!checkTimestamp(timestamp)) {
-            return null;
-        }
+        
+		/*
+		 * remove check time-limit-Age
+		 * forever available except "Logout"
+		 *         if (!checkTimestamp(timestamp)) {
+		 *          return null;
+		 *     }
+		*/
 
         GuacamoleConfiguration config = parseConfigParams(request);
 
@@ -157,15 +160,8 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
         config.setParameter("id", id);
         return config;
     }
-
-    private boolean checkTimestamp(String ts) {
-        if (ts == null) {
-            return false;
-        }
-        long timestamp = Long.parseLong(ts, 10);
-        long now = timeProvider.currentTimeMillis();
-        return timestamp + timestampAgeLimit > now;
-    }
+    
+    /*remove check time-limit-age Function*/
 
     private GuacamoleConfiguration parseConfigParams(HttpServletRequest request) {
         GuacamoleConfiguration config = new GuacamoleConfiguration();
