@@ -39,16 +39,10 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
 
     // these will be overridden by properties file if present
     private String defaultProtocol = "rdp";
-    public static final long TEN_MINUTES = 10 * 60 * 1000;
-    private long timestampAgeLimit = TEN_MINUTES; // 10 minutes
-
-    // Per-request params
-    public static final String SIGNATURE_PARAM = "signature";
-    public static final String ID_PARAM = "id";
-    public static final String TIMESTAMP_PARAM = "timestamp";
+    private String method ;
     public static final String PARAM_PREFIX = "guac.";
 
-    private static final List<String> SIGNED_PARAMETERS = new ArrayList<String>() {
+    private static final List<String> SIGNED_PARAMETER_LIST = new ArrayList<String>() {
     	{
 	        add("username");
 	        add("password");
@@ -57,7 +51,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
     	}
     };
 
-
+    /* two constructed functions */
     public HackathonAuthenticationProvider(TimeProviderInterface timeProvider) {
         this.timeProvider = timeProvider;
         logger.info("logger system init sucessed ");
@@ -92,70 +86,96 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
         }
         String id = config.getParameter("id");
         SimpleConnectionDirectory connections = (SimpleConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
-        SimpleConnection connection = new SimpleConnection(id, id, config);
-        connections.putConnection(connection);
-        connections.removeConnection("id");
+        
+        /* connect method */
+        if (method.equals("connect")) {
+            SimpleConnection connection = new SimpleConnection(id, id, config);
+            connections.putConnection(connection);
+        /* logout method */
+		}else if (method.equals("logout")) {
+			connections.removeConnection("id");
+			logger.info("Logout! and remove the connection");
+			return null ;
+		}
 
         return context;
     }
 
     private GuacamoleConfiguration getGuacamoleConfiguration(HttpServletRequest request) throws GuacamoleException {
+    	
+    	/**
+    	 * Rquest String should be like this:
+    	 * 
+    	 * http://42.159.29.99:8080/guacamole/client.xhtml?
+    	 * id=c/123456789&
+    	 * clientIP=10.0.2.15&
+    	 * method=connect/logout&					
+    	 * guac.protocol=ssh&
+    	 * guac.hostname=42.159.29.99&
+    	 * guac.port=22&
+    	 * guac.username=opentech&
+    	 * guac.password=Password01!&
+    	 * signature=ykXXJ1WMUXWKAPK3Jtf4QsblVfM=
+    	 * 
+    	 * */
+    	
         if (signatureVerifier == null) {
             initFromProperties();
         }
-        String signature = request.getParameter(SIGNATURE_PARAM);
 
-        if (signature == null) {
-            return null;
+        /*check request values*/
+        if (request.getParameter("signature") == null || request.getParameter("clientIP") == null || request.getParameter("method") == null) {
+            logger.error("signature or clientIP or method from Request is Lost, Please check the request-URL");
+        	return null;
         }
-        signature = signature.replace(' ', '+');
-
-        String timestamp = request.getParameter(TIMESTAMP_PARAM);
         
-		/*
-		 * remove check time-limit-Age
-		 * forever available except "Logout"
-		 *         if (!checkTimestamp(timestamp)) {
-		 *          return null;
-		 *     }
-		*/
-
+        /*guacamole connection parameters parse from request*/
         GuacamoleConfiguration config = parseConfigParams(request);
+        
+        /*make up the message String*/
+        String id = request.getParameter("id").substring(2);
+	    	/**
+	    	 *  This should really use BasicGuacamoleTunnelServlet's IdentfierType, but it is private!
+	    	 *  Currently, the only prefixes are both 2 characters in length, but this could become invalid at some point.
+	    	 *  see: guacamole-client@a0f5ccb:guacamole/src/main/java/org/glyptodon/guacamole/net/basic/BasicGuacamoleTunnelServlet.java:244-252
+	         **/
+        String clientIP = request.getParameter("clientIP");
+        method = request.getParameter("method");
+       
+        
+        /*the message String should be like this*/
+        /**
+         * <sessionID><protocol><clientIP><method>username<username>password<password>hostname<guacamoleIP>port<port>
+         * 1a4fe20d3f5vnc10.0.2.15connectusernamerootpassword123456hostname42.159.29.99port5901 
+         * */
+        StringBuilder message = new StringBuilder();
+        message.append(id);
+        message.append(config.getProtocol());
+        message.append(clientIP);
+        message.append(method);
 
-        // Hostname is required!
-        if (config.getParameter("hostname") == null) {
-            return null;
-        }
-
-        // Hostname is required!
-        if (config.getProtocol() == null) {
-            return null;
-        }
-
-        StringBuilder message = new StringBuilder(timestamp)
-                .append(config.getProtocol());
-
-        for (String name : SIGNED_PARAMETERS) {
+        for (String name : SIGNED_PARAMETER_LIST) {
             String value = config.getParameter(name);
             if (value == null) {
+            	logger.error(name + " from Request is Lost, Please check the request-URL");
                 continue;
             }
             message.append(name);
             message.append(value);
         }
 
+        /*check signature matched or not*/
+        String signature = request.getParameter("signature").replace(' ', '+');
         if (!signatureVerifier.verifySignature(signature, message.toString())) {
-            return null;
+            logger.error("Signature is not matched !!! ");
+        	return null;
         }
-        String id = request.getParameter(ID_PARAM);
+        
+        
+        /*add id to be a param of config*/
         if (id == null) {
             id = "DEFAULT";
-        } else {
-        	// This should really use BasicGuacamoleTunnelServlet's IdentfierType, but it is private!
-        	// Currently, the only prefixes are both 2 characters in length, but this could become invalid at some point.
-        	// see: guacamole-client@a0f5ccb:guacamole/src/main/java/org/glyptodon/guacamole/net/basic/BasicGuacamoleTunnelServlet.java:244-252
-        	id = id.substring(2);
-        }
+        } 
         // This isn't normally part of the config, but it makes it much easier to return a single object
         config.setParameter("id", id);
         return config;
@@ -190,12 +210,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
         String secretKey = GuacamoleProperties.getRequiredProperty(SECRET_KEY);
         signatureVerifier = new SignatureVerifier(secretKey);
         defaultProtocol = GuacamoleProperties.getProperty(DEFAULT_PROTOCOL);
-        if (defaultProtocol == null) defaultProtocol = "rdp";
-        if (GuacamoleProperties.getProperty(TIMESTAMP_AGE_LIMIT) == null){
-           timestampAgeLimit = TEN_MINUTES;
-        }  else {
-           timestampAgeLimit = GuacamoleProperties.getProperty(TIMESTAMP_AGE_LIMIT);
-        }
+        if (defaultProtocol == null) defaultProtocol = "rdp";        
     }
 }
 
