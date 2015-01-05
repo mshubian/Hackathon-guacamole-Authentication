@@ -158,7 +158,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
             String value = config.getParameter(name);
             if (value == null) {
             	logger.error(name + " from Request is Lost, Please check the request-URL");
-                continue;
+                return null;
             }
             message.append(name);
             message.append(value);
@@ -166,6 +166,8 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
 
         /*check signature matched or not*/
         String signature = request.getParameter("signature").replace(' ', '+');
+        logger.info("signature from client request is:  " + signature);
+        logger.info(" message from client request is :  " + message );
         if (!signatureVerifier.verifySignature(signature, message.toString())) {
             logger.error("Signature is not matched !!! ");
         	return null;
