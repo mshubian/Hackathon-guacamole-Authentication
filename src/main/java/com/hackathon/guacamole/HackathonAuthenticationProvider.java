@@ -10,11 +10,13 @@ import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.glyptodon.guacamole.properties.IntegerGuacamoleProperty;
 import org.glyptodon.guacamole.properties.StringGuacamoleProperty;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
+import java.net.CookieStore;
 import java.util.*;
 
 public class HackathonAuthenticationProvider extends SimpleAuthenticationProvider {
@@ -81,6 +83,16 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
     public UserContext updateUserContext(UserContext context, Credentials credentials) throws GuacamoleException {
         HttpServletRequest request = credentials.getRequest();
         GuacamoleConfiguration config = getGuacamoleConfiguration(request);
+                
+        /*get cookies */
+        Cookie cookies[]= request.getCookies();
+        logger.info("=======The cookies info from client======:");
+        for (int i = 0; i < cookies.length; i++) {
+			Cookie cookie = cookies[i];		
+			logger.info(cookie.getName() + "||" + cookie.getValue()); 
+		}
+        logger.info("==========================================:");
+        
         if (config == null) {
             return null;
         }
