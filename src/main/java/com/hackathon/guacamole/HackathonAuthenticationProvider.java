@@ -85,14 +85,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
         HttpServletRequest request = credentials.getRequest();
         GuacamoleConfiguration config = getGuacamoleConfiguration(request);
                 
-        /*get cookies */
-        Cookie cookies[]= request.getCookies();
-        logger.info("=======The cookies info from client======:");
-        for (int i = 0; i < cookies.length; i++) {
-			Cookie cookie = cookies[i];		
-			logger.info(cookie.getName() + "||" + cookie.getValue()); 
-		}
-        logger.info("==========================================:");
+
         
         if (config == null) {
             return null;
@@ -131,6 +124,23 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
     	 * signature=ykXXJ1WMUXWKAPK3Jtf4QsblVfM=
     	 * 
     	 * */
+    	
+    	logger.info("get request URI : "+request.getRequestURI());
+    	logger.info("get request URI method: "+request.getMethod());
+    	logger.info("get request URI pathinfo: "+request.getPathInfo());
+    	logger.info("get request URI QueryString: "+request.getQueryString());
+    	logger.info("get request URI sessionID: "+request.getRequestedSessionId());
+    	
+        /*get cookies */
+        Cookie cookies[]= request.getCookies();
+        logger.info("=======The cookies info from client======:");
+        for (int i = 0; i < cookies.length; i++) {
+			Cookie cookie = cookies[i];		
+			logger.info(cookie.getName() + "||" + cookie.getValue()); 
+		}
+        logger.info("==========================================:");
+    	
+    	
     	
         if (signatureVerifier == null) {
             initFromProperties();
