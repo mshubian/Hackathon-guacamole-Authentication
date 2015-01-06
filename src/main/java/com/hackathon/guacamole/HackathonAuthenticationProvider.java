@@ -16,7 +16,6 @@ import org.apache.log4j.PropertyConfigurator;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import java.net.CookieStore;
 import java.util.*;
 
 public class HackathonAuthenticationProvider extends SimpleAuthenticationProvider {
@@ -59,6 +58,8 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
         logger.info("logger system init sucessed ");
     }
     public HackathonAuthenticationProvider() {
+    	PropertyConfigurator.configure("/etc/guacamole/logger.properties");
+    	logger.info("log init sucess ~~~");
         timeProvider = new DefaultTimeProvider();
     }
 
