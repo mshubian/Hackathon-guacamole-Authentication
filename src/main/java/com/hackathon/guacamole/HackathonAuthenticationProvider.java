@@ -77,14 +77,13 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
         
         /*check user valid or not*/
 		try {
-			Connect2Osslab conn = new Connect2Osslab();
+			Connect2OpenHackathon conn = new Connect2OpenHackathon();
 			checkResult = conn.checkUser(cookieString);
 			logger.info("Check User result is :" + checkResult);
 			
 			
 			/*if user is valid then connect withn OSSLAB and get user info*/
 			if (checkResult != null) {
-				String userinfo = conn.getUserinfo();
 				config = new GuacamoleConfiguration();
 				
 				
