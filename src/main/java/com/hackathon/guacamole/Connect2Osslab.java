@@ -24,11 +24,6 @@ public class Connect2Osslab {
 	public Connect2Osslab() throws Exception{
 		
 		PropertyConfigurator.configure("/etc/guacamole/logger.properties");
-        conn.setRequestMethod("GET");  
-        conn.setDoOutput(true);  
-        conn.setDoInput(true);
-        conn.setUseCaches(false); 
-
 	}
 	
 	public  String checkUser(String cookieString) {
@@ -41,8 +36,13 @@ public class Connect2Osslab {
         try {
         	 url = new URL(URLstring);
         	 conn = (HttpURLConnection) url.openConnection();
+        	 
+             conn.setRequestMethod("GET");  
+             conn.setDoOutput(true);  
+             conn.setDoInput(true);
+             conn.setUseCaches(false); 
              conn.setRequestProperty("soapActionString",URLstring);
-             conn.addRequestProperty("Cookie", cookieString);
+             conn.setRequestProperty("Cookie", cookieString);
              conn.connect();
             
             in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -52,7 +52,7 @@ public class Connect2Osslab {
             }
             
         } catch (Exception e) {
-        	logger.error("Exception when connect with OSSLAB to check User Cookies");
+        	logger.error("Exception when connect with OSSLAB to check User Cookies BBB");
             e.printStackTrace();
         }
         finally {

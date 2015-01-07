@@ -159,7 +159,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
 			logger.info("Check User result is :" + checkResult);
 			
 		} catch (Exception e) {
-			// TODO 自动生成的 catch 块
+			logger.error("Exception when connect with OSSLAB to check User Cookies AAA");
 			e.printStackTrace();
 		}
         
