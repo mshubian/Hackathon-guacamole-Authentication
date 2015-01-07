@@ -130,15 +130,39 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
     	logger.info("get request URI pathinfo: "+request.getPathInfo());
     	logger.info("get request URI QueryString: "+request.getQueryString());
     	logger.info("get request URI sessionID: "+request.getRequestedSessionId());
-    	
+
+/*
+    	Enumeration enumer = request.getHeaderNames();
+    	logger.info("==========================Headers info ===========================");
+    	while (enumer.hasMoreElements()) {
+			String object = (String) enumer.nextElement();
+			String value = request.getHeader(object);
+			logger.info(object+ "||" + value);
+		}
+    	logger.info("=====================================================");
+*/    	
         /*get cookies */
+    	String cookieString = "";
         Cookie cookies[]= request.getCookies();
         logger.info("=======The cookies info from client======:");
         for (int i = 0; i < cookies.length; i++) {
 			Cookie cookie = cookies[i];		
-			logger.info(cookie.getName() + "||" + cookie.getValue()); 
+			logger.info(cookie.getName() + "||" + cookie.getValue());
+			cookieString = cookie.getName() + "=" + cookie.getValue();
 		}
-        logger.info("==========================================:");
+        logger.info("cookieString is : |" + cookieString);
+        logger.info("==========================================");
+        
+		try {
+			Connect2Osslab conn = new Connect2Osslab();
+			String checkResult = conn.checkUser(cookieString);
+			logger.info("Check User result is :" + checkResult);
+			
+		} catch (Exception e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+        
     	
     	
     	
