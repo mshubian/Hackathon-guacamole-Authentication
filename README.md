@@ -66,7 +66,6 @@ auth-request-url: http://osslab.msopentech.cn/checkguacookies
 
 ```
 then copy the maven build out jar file into the property `lib-directory` path;     
-and give all permission to the jar file
 ```
 sudo cp openhackathon-guacamole-auth-provider/target/openhackathon-gucamole-authentication-1.0-SNAPSHOT.jar /var/lib/guacamole
 ```
