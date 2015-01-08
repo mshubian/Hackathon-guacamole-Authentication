@@ -26,7 +26,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
         public String getName() { return "auth-request-url"; }
     };
 
-    /* two constructed functions */
+    /*constructed functions*/
     public HackathonAuthenticationProvider() {
     	PropertyConfigurator.configure("/etc/guacamole/logger.properties");
     	logger.info("log init sucess ~~~");
