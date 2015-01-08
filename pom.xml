@@ -73,6 +73,13 @@
             <version>1.0</version>
         </dependency>
         
+        <!-- json -->
+        <dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+        
         <!-- logger -->
         <dependency>  
     		<groupId>org.slf4j</groupId>  

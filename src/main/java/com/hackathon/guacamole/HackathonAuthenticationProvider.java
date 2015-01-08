@@ -58,56 +58,26 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
     private GuacamoleConfiguration getGuacamoleConfiguration(HttpServletRequest request) throws GuacamoleException {
     	
     	GuacamoleConfiguration config ;
-    	String checkResult = null;
-    	
-    	
+    	String jsonString = null;
+    	   	
         /*get cookies */
     	String cookieString = "";
         Cookie cookies[]= request.getCookies();
-        logger.info("=======The cookies info from client======:");
         for (int i = 0; i < cookies.length; i++) {
 			Cookie cookie = cookies[i];		
-			logger.info(cookie.getName() + "||" + cookie.getValue());
 			cookieString = cookie.getName() + "=" + cookie.getValue();
 		}
         logger.info("cookieString is : |" + cookieString);
-        logger.info("==========================================");
-        
-        
-        
+               
         /*check user valid or not*/
 		try {
 			Connect2OpenHackathon conn = new Connect2OpenHackathon();
-			checkResult = conn.checkUser(cookieString);
-			logger.info("Check User result is :" + checkResult);
 			
-			
-			/*if user is valid then connect withn OSSLAB and get user info*/
-			if (checkResult != null) {
-				config = new GuacamoleConfiguration();
-				
-				
-				String id = request.getParameter("id").substring(2);
-		    	/**
-		    	 *  This should really use BasicGuacamoleTunnelServlet's IdentfierType, but it is private!
-		    	 *  Currently, the only prefixes are both 2 characters in length, but this could become invalid at some point.
-		    	 *  see: guacamole-client@a0f5ccb:guacamole/src/main/java/org/glyptodon/guacamole/net/basic/BasicGuacamoleTunnelServlet.java:244-252
-		         **/
-				config.setParameter("id", "id");
-				config.setParameter("username", "username");
-				config.setParameter("password", "password");
-				config.setParameter("hostname", "hostname");
-				config.setParameter("port", "port");
-				config.setProtocol("vnc or ssh");
-				
-				return config ;
-			
-				
-			/*if user is invalid absolutly return null*/	
-			}else {
-				return null ;
-			}
-	
+			jsonString = conn.getGuacamoleJSONString(cookieString);
+			logger.info("get guacamole json String :" + jsonString);
+			Trans2GuacdConfiguration trans = new Trans2GuacdConfiguration(jsonString);
+			config = trans.getConfiguration();
+			return config ;
 			
 		} catch (Exception e) {
 			logger.error("Exception when connect with OSSLAB to check User Cookies AAA");

@@ -1,15 +1,9 @@
 package com.hackathon.guacamole;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
-
-import javax.naming.spi.DirStateFactory.Result;
-import javax.servlet.http.Cookie;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -21,21 +15,23 @@ public class Connect2OpenHackathon {
 	private URL url = null ;
     private BufferedReader in = null;
 		
-	public Connect2OpenHackathon() throws Exception{		
-		PropertyConfigurator.configure("/etc/guacamole/logger.properties");       
+	public Connect2OpenHackathon() throws Exception{
+		
+		PropertyConfigurator.configure("/etc/guacamole/logger.properties");
 	}
 	
 	/*check user withn cookies */
-	public String checkUser(String cookieString) {
+	public String getGuacamoleJSONString(String cookieString) {
 		
 		String URLstring = "http://osslab.msopentech.cn/getguacdconfiguration";
-        String result = "";
-     
+        String result = null;
+        HttpURLConnection conn = null ;
+        
         try {
         	 url = new URL(URLstring);
 
         	 HttpURLConnection.setFollowRedirects(false);
-        	 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        	 conn = (HttpURLConnection) url.openConnection();
         	 
              conn.setRequestMethod("GET");  
              conn.setUseCaches(false);
@@ -45,8 +41,8 @@ public class Connect2OpenHackathon {
              int status = conn.getResponseCode();
              
              if (status != 200) {
-            	 logger.debug("OpenHackathon" + conn.getResponseCode());
-            	 logger.debug("user have not login , please do it before your request !!!");
+            	 logger.debug("OpenHackathon http reponse code is :" + conn.getResponseCode());
+            	 logger.debug("user may have not login , please do it before your request !!!");
             	 return result;
              }
            
@@ -74,6 +70,7 @@ public class Connect2OpenHackathon {
         }
         return result;
     }
+	
 }
 
 	
