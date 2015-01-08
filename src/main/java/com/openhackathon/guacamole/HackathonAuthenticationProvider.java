@@ -1,4 +1,4 @@
-package com.hackathon.guacamole;
+package com.openhackathon.guacamole;
 
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.net.auth.Credentials;
@@ -9,8 +9,8 @@ import org.glyptodon.guacamole.net.auth.simple.SimpleConnectionDirectory;
 import org.glyptodon.guacamole.properties.StringGuacamoleProperty;
 import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ import java.util.*;
 
 public class HackathonAuthenticationProvider extends SimpleAuthenticationProvider {
 	
-	public static final Logger logger = Logger.getLogger(HackathonAuthenticationProvider.class.getClass());
+	private Logger logger = LoggerFactory.getLogger(HackathonAuthenticationProvider.class.getClass());
 	
     private static final StringGuacamoleProperty AUTH_REQUEST_URL = new StringGuacamoleProperty() {
         @Override
@@ -28,9 +28,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
 
     /*constructed functions*/
     public HackathonAuthenticationProvider() {
-    	PropertyConfigurator.configure("/etc/guacamole/logger.properties");
-    	logger.info("log init sucess ~~~");
-
+    	logger.info("==============================gucamole authentication jar log init =============================================");
     }
 
     @Override

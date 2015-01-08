@@ -1,4 +1,4 @@
-package com.hackathon.guacamole;
+package com.openhackathon.guacamole;
 
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 import org.json.JSONObject;

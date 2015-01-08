@@ -1,4 +1,4 @@
-package com.hackathon.guacamole;
+package com.openhackathon.guacamole;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
