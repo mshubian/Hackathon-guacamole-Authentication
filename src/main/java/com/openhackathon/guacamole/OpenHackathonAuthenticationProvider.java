@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.*;
 
-public class HackathonAuthenticationProvider extends SimpleAuthenticationProvider {
+public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationProvider {
 	
-	private Logger logger = LoggerFactory.getLogger(HackathonAuthenticationProvider.class.getClass());
+	private Logger logger = LoggerFactory.getLogger(OpenHackathonAuthenticationProvider.class.getClass());
 	
     private static final StringGuacamoleProperty AUTH_REQUEST_URL = new StringGuacamoleProperty() {
         @Override
@@ -27,7 +27,7 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
     };
 
     /*constructed functions*/
-    public HackathonAuthenticationProvider() {
+    public OpenHackathonAuthenticationProvider() {
     	logger.info("==============================gucamole authentication jar log init =============================================");
     }
 

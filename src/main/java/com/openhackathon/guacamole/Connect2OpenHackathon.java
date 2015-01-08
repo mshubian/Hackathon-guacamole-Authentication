@@ -5,20 +5,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class Connect2OpenHackathon {
 
-	private Logger logger = Logger.getLogger(Connect2OpenHackathon.class.getClass());
+	private Logger logger = LoggerFactory.getLogger(Connect2OpenHackathon.class.getClass());
 	private URL url = null ;
     private BufferedReader in = null;
     private String urlSTring = null ;
 		
 	public Connect2OpenHackathon(String urlSTring) throws Exception{
 		this.urlSTring = urlSTring;
-		PropertyConfigurator.configure("/etc/guacamole/logger.properties");
 	}
 	
 	/*check user withn cookies */
