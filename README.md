@@ -1,4 +1,4 @@
-Hackathon-guacamole-Authentication
+openhackathon-guacamole-auth-provider
 ==================================
 This document is talking about how to setup the Guacamole environment withn custom authentication
 Then we can drop the “noauth” and make Guacamole‘s authentication can be controled by our OSSLAB web system;
@@ -32,7 +32,7 @@ Check the results wheather the versions are matched
 
 Then download the maven project sourece codes from github withn command:
 ```
-git clone https://github.com/grncdr/guacamole-auth-hmac.git
+https://github.com/mshubian/openhackathon-guacamole-auth-provider.git
 ```
 build the project withn these steps:
 ```
@@ -51,7 +51,7 @@ and wait until the results like this:
 [INFO] Final Memory: 11M/154M
 [INFO] ------------------------------------------------------------------------
 ```
-After project build successfully you will find the `guacamole-auth-hmac-1.0-SNAPSHOT.jar` in the `target` folder, this jar file will provide the authentication service
+After project build successfully you will find the `openhackathon-gucamole-authentication-1.0-SNAPSHOT.jar` in the `target` folder, this jar file will provide the authentication service
 
 ##config guacamole
 Check the guacamole config file `/etc/guacamole.properties`, and edit the file like this:
@@ -61,15 +61,14 @@ guacd-hostname: 42.159.29.99
 guacd-port:     4822
 
 lib-directory: /var/lib/guacamole
-auth-provider: com.stephensugden.guacamole.net.hmac.HmacAuthenticationProvider
-secret-key: secret
-timestamp-age-limit: 600000
+auth-provider: com.openhackathon.guacamole.OpenHackathonAuthenticationProvider
+auth-request-url: http://osslab.msopentech.cn/checkguacookies
+
 ```
 then copy the maven build out jar file into the property `lib-directory` path;     
 and give all permission to the jar file
 ```
-sudo cp guacamole-auth-hmac/target/guacamole-auth-hmac-1.0-SNAPSHOT.jar /var/lib/guacamole
-sudo chmod 777 /var/lib/guacamole/guacamole-auth-hmac-1.0-SNAPSHOT.jar 
+sudo cp openhackathon-guacamole-auth-provider/target/openhackathon-gucamole-authentication-1.0-SNAPSHOT.jar /var/lib/guacamole
 ```
 #config tomcat7
 After install tomcat7 we need to make tomcat load the guacamole web application, we just need to copy the `guacamole.war` to `webapps` and some other necessary operations. And the guacamole.war was provided after we install guacamole commponent.     
@@ -78,12 +77,7 @@ So we can config tomcat7 like these steps:
 sudo ln -s /var/lib/tomcat7/conf /usr/share/tomcat7/conf
 sudo ln -s /var/lib/tomcat7/webapps /usr/share/tomcat7/webapps
 sudo chmod 777 /usr/share/tomcat7/webapps
-
 sudo cp /var/lib/guacamole/guacamole.war /usr/share/tomcat7/webapps/
-sudo /etc/init.d/tomcat7 restart
-
-sudo cp /var/lib/guacamole/guacamole-auth-hmac-1.0-SNAPSHOT.jar /usr/share/tomcat7/webapps/guacamole/WEB-INF/lib
-sudo chmod 777 /usr/share/tomcat7/webapps/guacamole/WEB-INF/lib/guacamole-auth-hmac-1.0-SNAPSHOT.jar 
 
 sudo mkdir /usr/share/tomcat7/.guacamole
 sudo ln -s /etc/guacamole/guacamole.properties /usr/share/tomcat7/.guacamole/guacamole.properties
