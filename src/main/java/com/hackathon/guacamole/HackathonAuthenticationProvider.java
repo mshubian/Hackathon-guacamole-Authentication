@@ -6,6 +6,8 @@ import org.glyptodon.guacamole.net.auth.UserContext;
 import org.glyptodon.guacamole.net.auth.simple.SimpleAuthenticationProvider;
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnection;
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnectionDirectory;
+import org.glyptodon.guacamole.properties.StringGuacamoleProperty;
+import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -18,6 +20,11 @@ import java.util.*;
 public class HackathonAuthenticationProvider extends SimpleAuthenticationProvider {
 	
 	public static final Logger logger = Logger.getLogger(HackathonAuthenticationProvider.class.getClass());
+	
+    private static final StringGuacamoleProperty AUTH_REQUEST_URL = new StringGuacamoleProperty() {
+        @Override
+        public String getName() { return "auth-request-url"; }
+    };
 
     /* two constructed functions */
     public HackathonAuthenticationProvider() {
@@ -71,7 +78,10 @@ public class HackathonAuthenticationProvider extends SimpleAuthenticationProvide
                
         /*check user valid or not*/
 		try {
-			Connect2OpenHackathon conn = new Connect2OpenHackathon();
+			
+			String authRequestURL = GuacamoleProperties.getProperty(AUTH_REQUEST_URL);
+			logger.info("OpenHackathon guacd Auth request URL is : " + authRequestURL);
+			Connect2OpenHackathon conn = new Connect2OpenHackathon(authRequestURL);		
 			
 			jsonString = conn.getGuacamoleJSONString(cookieString);
 			logger.info("get guacamole json String :" + jsonString);

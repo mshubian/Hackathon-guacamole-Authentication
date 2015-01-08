@@ -14,21 +14,21 @@ public class Connect2OpenHackathon {
 	private Logger logger = Logger.getLogger(Connect2OpenHackathon.class.getClass());
 	private URL url = null ;
     private BufferedReader in = null;
+    private String urlSTring = null ;
 		
-	public Connect2OpenHackathon() throws Exception{
-		
+	public Connect2OpenHackathon(String urlSTring) throws Exception{
+		this.urlSTring = urlSTring;
 		PropertyConfigurator.configure("/etc/guacamole/logger.properties");
 	}
 	
 	/*check user withn cookies */
 	public String getGuacamoleJSONString(String cookieString) {
 		
-		String URLstring = "http://osslab.msopentech.cn/getguacdconfiguration";
         String result = null;
         HttpURLConnection conn = null ;
         
         try {
-        	 url = new URL(URLstring);
+        	 url = new URL(urlSTring);
 
         	 HttpURLConnection.setFollowRedirects(false);
         	 conn = (HttpURLConnection) url.openConnection();
