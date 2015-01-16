@@ -1,5 +1,6 @@
 package com.openhackathon.guacamole;
 
+
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 import org.json.JSONObject;
 
@@ -38,5 +39,4 @@ public class Trans2GuacdConfiguration {
 		return configuration;
 	}
 
-	
 }
