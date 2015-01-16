@@ -17,16 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.*;
 
+
 public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationProvider {
 	
 	private Logger logger = LoggerFactory.getLogger(OpenHackathonAuthenticationProvider.class.getClass());
 	
     private static final StringGuacamoleProperty AUTH_REQUEST_URL = new StringGuacamoleProperty() {
+
         @Override
         public String getName() { return "auth-request-url"; }
     };
 
     /*constructed functions*/
+    
     public OpenHackathonAuthenticationProvider() {
     	logger.info("==============================gucamole authentication jar log init =============================================");
     }
