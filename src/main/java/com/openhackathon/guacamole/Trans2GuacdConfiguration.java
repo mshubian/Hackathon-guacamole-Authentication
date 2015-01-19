@@ -15,6 +15,10 @@ import org.json.JSONObject;
 public class Trans2GuacdConfiguration {
 	
 	private GuacamoleConfiguration configuration ;
+	
+	public Trans2GuacdConfiguration(){
+		configuration = new GuacamoleConfiguration();
+	}
 
 	public Trans2GuacdConfiguration(String jsonString) {
 				
@@ -23,7 +27,7 @@ public class Trans2GuacdConfiguration {
 			configuration = new GuacamoleConfiguration();
 			
 			configuration.setProtocol(json.getString("protocol"));
-			configuration.setConnectionID(json.getString("id"));
+			configuration.setConnectionID(json.getString("connectionID"));
 			
 			configuration.setParameter("username", json.getString("username"));
 			configuration.setParameter("password", json.getString("password"));

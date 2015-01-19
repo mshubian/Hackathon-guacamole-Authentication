@@ -67,15 +67,9 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
     	
     	GuacamoleConfiguration config ;
     	String jsonString = null;
-    	   	
-        /*get cookies */
-    	String cookieString = "";
-        Cookie cookies[]= request.getCookies();
-        for (int i = 0; i < cookies.length; i++) {
-			Cookie cookie = cookies[i];		
-			cookieString = cookie.getName() + "=" + cookie.getValue();
-		}
-        logger.info("cookieString is : |" + cookieString);
+        
+        String tokenString = request.getParameter("token");
+        logger.info("tokenString is : |" + tokenString);
                
         /*check user valid or not*/
 		try {
@@ -84,12 +78,13 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
 			logger.info("OpenHackathon guacd Auth request URL is : " + authRequestURL);
 			Connect2OpenHackathon conn = new Connect2OpenHackathon(authRequestURL);		
 			
-			jsonString = conn.getGuacamoleJSONString(cookieString);
+			jsonString = conn.getGuacamoleJSONString(tokenString);
 			logger.info("get guacamole json String :" + jsonString);
+			
 			Trans2GuacdConfiguration trans = new Trans2GuacdConfiguration(jsonString);
 			config = trans.getConfiguration();
-			return config ;
 			
+			return config ;			
 		} catch (Exception e) {
 			logger.error("Exception when connect with open-hackathon to check User login");
 			e.printStackTrace();

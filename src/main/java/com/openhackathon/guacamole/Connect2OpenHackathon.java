@@ -23,7 +23,7 @@ public class Connect2OpenHackathon {
 	/*check user withn cookies */
 	public String getGuacamoleJSONString(String tokenString) {
 		
-        String result = null;
+        String result = null ;
         HttpURLConnection conn = null ;
         
         try {
@@ -40,9 +40,9 @@ public class Connect2OpenHackathon {
              int status = conn.getResponseCode();
              
              if (status != 200) {
-            	 logger.debug("OpenHackathon http reponse code is :" + conn.getResponseCode());
+            	 logger.error("OpenHackathon http reponse code is :" + conn.getResponseCode());
             	 logger.debug("user may have not login , please do it before your request !!!");
-            	 return result;
+            	 return result ;
              }
            
              in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
