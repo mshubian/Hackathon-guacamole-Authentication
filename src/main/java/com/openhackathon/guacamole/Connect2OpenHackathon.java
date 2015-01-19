@@ -21,7 +21,7 @@ public class Connect2OpenHackathon {
 	}
 	
 	/*check user withn cookies */
-	public String getGuacamoleJSONString(String cookieString) {
+	public String getGuacamoleJSONString(String tokenString) {
 		
         String result = null;
         HttpURLConnection conn = null ;
@@ -34,7 +34,7 @@ public class Connect2OpenHackathon {
         	 
              conn.setRequestMethod("GET");  
              conn.setUseCaches(false);
-             conn.setRequestProperty("Cookie", cookieString);
+             conn.setRequestProperty("token", tokenString);
              conn.connect();
              
              int status = conn.getResponseCode();

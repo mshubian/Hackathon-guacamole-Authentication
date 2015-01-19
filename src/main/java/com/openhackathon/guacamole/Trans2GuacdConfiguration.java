@@ -20,14 +20,15 @@ public class Trans2GuacdConfiguration {
 				
 		try {
 			JSONObject json = new JSONObject(jsonString);
-			
 			configuration = new GuacamoleConfiguration();
-			configuration.setParameter("id", json.getString("id"));
+			
+			configuration.setProtocol(json.getString("protocol"));
+			configuration.setConnectionID(json.getString("id"));
+			
 			configuration.setParameter("username", json.getString("username"));
 			configuration.setParameter("password", json.getString("password"));
 			configuration.setParameter("hostname", json.getString("hostname"));
 			configuration.setParameter("port", json.getString("port"));
-			configuration.setProtocol(json.getString("protocol"));	
 			
 		} catch (Exception e) {
 			configuration = new GuacamoleConfiguration();

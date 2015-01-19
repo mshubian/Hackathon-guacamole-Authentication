@@ -56,7 +56,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         if (config == null) {
             return null;
         }
-        String id = config.getParameter("id");
+        String id = config.getConnectionID();
         SimpleConnectionDirectory connections = (SimpleConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
         SimpleConnection connection = new SimpleConnection(id, id, config);
         connections.putConnection(connection);
@@ -91,7 +91,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
 			return config ;
 			
 		} catch (Exception e) {
-			logger.error("Exception when connect with OSSLAB to check User Cookies AAA");
+			logger.error("Exception when connect with open-hackathon to check User login");
 			e.printStackTrace();
 			return null;
 		}
