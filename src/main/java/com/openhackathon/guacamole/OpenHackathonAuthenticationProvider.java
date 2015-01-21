@@ -57,8 +57,9 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
             return null;
         }
         String id = config.getConnectionID();
+        String name = config.getParameter("name");
         SimpleConnectionDirectory connections = (SimpleConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
-        SimpleConnection connection = new SimpleConnection(id, id, config);
+        SimpleConnection connection = new SimpleConnection(name, id, config);
         connections.putConnection(connection);
         return context;
     }
