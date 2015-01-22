@@ -14,27 +14,29 @@ public class Connect2OpenHackathon {
 	private Logger logger = LoggerFactory.getLogger(Connect2OpenHackathon.class.getClass());
 	private URL url = null ;
     private BufferedReader in = null;
-    private String urlSTring = null ;
+    private String urlString = null ;
 		
 	public Connect2OpenHackathon(String urlSTring) throws Exception{
-		this.urlSTring = urlSTring;
+		this.urlString = urlSTring;
 	}
 	
 	/*check user withn cookies */
-	public String getGuacamoleJSONString(String tokenString) {
+	public String getGuacamoleJSONString(String connectionID,String tokenString) {
 		
         String result = null ;
         HttpURLConnection conn = null ;
         
         try {
-        	 url = new URL(urlSTring);
+        	 url = new URL(urlString);
 
         	 HttpURLConnection.setFollowRedirects(false);
-        	 conn = (HttpURLConnection) url.openConnection();
-        	 
+        	 conn = (HttpURLConnection) url.openConnection();       	 
              conn.setRequestMethod("GET");  
              conn.setUseCaches(false);
+             conn.setRequestProperty("id",connectionID );
              conn.setRequestProperty("token", tokenString);
+             logger.info("Two request-parameters,id:" + connectionID + ", token:" +tokenString);
+             logger.info("send http-request to open-hackathon");
              conn.connect();
              
              int status = conn.getResponseCode();
