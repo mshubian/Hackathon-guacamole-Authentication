@@ -71,7 +71,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
     	String jsonString = null;
         
         String tokenString = request.getParameter("token");
-        String connectionID = request.getParameter("id");
+        String connectionID = request.getParameter("id").substring(2);
         logger.info("tokenString is : |" + tokenString);
                
         /*check user valid or not*/
