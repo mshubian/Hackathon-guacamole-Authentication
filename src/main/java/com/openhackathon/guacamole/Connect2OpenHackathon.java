@@ -27,13 +27,12 @@ public class Connect2OpenHackathon {
         HttpURLConnection conn = null ;
         
         try {
-        	 url = new URL(urlString);
+        	 url = new URL(urlString+"?id="+connectionID);
 
         	 HttpURLConnection.setFollowRedirects(false);
         	 conn = (HttpURLConnection) url.openConnection();       	 
              conn.setRequestMethod("GET");  
              conn.setUseCaches(false);
-             conn.setRequestProperty("id",connectionID );
              conn.setRequestProperty("token", tokenString);
              logger.info("Two request-parameters,id:" + connectionID + ", token:" +tokenString);
              logger.info("send http-request to open-hackathon");
