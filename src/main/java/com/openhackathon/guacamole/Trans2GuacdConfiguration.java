@@ -24,8 +24,7 @@ public class Trans2GuacdConfiguration {
 		configuration = new GuacamoleConfiguration();		
 		try {
 			
-			String finalString = jsonString.substring(1, jsonString.length()-1);
-			JSONObject json = new JSONObject(finalString);
+			JSONObject json = new JSONObject(jsonString);
 			configuration = new GuacamoleConfiguration();
 			
 			configuration.setProtocol(json.getString("protocol"));
