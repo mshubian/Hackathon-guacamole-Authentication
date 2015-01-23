@@ -44,7 +44,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         }
         Map<String, GuacamoleConfiguration> configs = new HashMap<String, GuacamoleConfiguration>();
         configs.put(config.getConnectionID(), config);
-        logger.info("put configuration into The getAuthorizedConfigurations");
+        logger.info("======================put configuration into The getAuthorizedConfigurations");
         return configs;
     }
 
@@ -59,7 +59,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         String id = config.getConnectionID();
         String name = config.getParameter("name");
         SimpleConnectionDirectory connections = (SimpleConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
-        logger.info("get info from GuacamoleConfiguration,id:"+id+",name:"+ name);
+        logger.info("======================get info from GuacamoleConfiguration,id:"+id+",name:"+ name);
         SimpleConnection connection = new SimpleConnection(name, id, config);
         connections.putConnection(connection);
         return context;
@@ -78,11 +78,11 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
 		try {
 			
 			String authRequestURL = GuacamoleProperties.getProperty(AUTH_REQUEST_URL);
-			logger.info("OpenHackathon guacd Auth request URL is : " + authRequestURL);
+			logger.info("==============================OpenHackathon guacd Auth request URL is : " + authRequestURL);
 			
 			Connect2OpenHackathon conn = new Connect2OpenHackathon(authRequestURL);					
 			jsonString = conn.getGuacamoleJSONString(connectionID,tokenString);
-			logger.info("get guacamole config json String :" + jsonString);
+			logger.info("==============================get guacamole config json String :" + jsonString);
 			
 			String finalString = jsonString.substring(1, jsonString.length()-1).replace("\\", "");
 			Trans2GuacdConfiguration trans = new Trans2GuacdConfiguration(finalString);
@@ -90,7 +90,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
 			
 			return config ;			
 		} catch (Exception e) {
-			logger.error("Exception when connect with open-hackathon to check User login");
+			logger.error("=============================Exception when connect with open-hackathon to check User login");
 			e.printStackTrace();
 			return null;
 		}

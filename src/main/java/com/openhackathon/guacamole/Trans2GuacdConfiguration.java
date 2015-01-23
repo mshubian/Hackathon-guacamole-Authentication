@@ -36,7 +36,7 @@ public class Trans2GuacdConfiguration {
 			configuration.setParameter("port", json.getString("port"));
 			
 		} catch (Exception e) {
-			logger.error("Failed when transfor jsonString to GuacamoleConfiguation  ");
+			logger.error("==================Failed when transfor jsonString to GuacamoleConfiguation  ");
 			configuration = new GuacamoleConfiguration();
 			e.printStackTrace();			
 		}			

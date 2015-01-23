@@ -34,8 +34,8 @@ public class Connect2OpenHackathon {
              conn.setRequestMethod("GET");  
              conn.setUseCaches(false);
              conn.setRequestProperty("token", tokenString);
-             logger.info("Two request-parameters,id:" + connectionID + ", token:" +tokenString);
-             logger.info("send http-request to open-hackathon");
+             logger.info("======================Two request-parameters,id:" + connectionID + ", token:" +tokenString);
+             logger.info("======================send http-request to open-hackathon");
              conn.connect();
              
              int status = conn.getResponseCode();
