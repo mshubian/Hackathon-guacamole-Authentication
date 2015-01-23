@@ -42,9 +42,9 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         if (config == null) {
             return null;
         }
-
         Map<String, GuacamoleConfiguration> configs = new HashMap<String, GuacamoleConfiguration>();
         configs.put(config.getConnectionID(), config);
+        logger.info("put configuration into The getAuthorizedConfigurations");
         return configs;
     }
 
@@ -59,6 +59,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         String id = config.getConnectionID();
         String name = config.getParameter("name");
         SimpleConnectionDirectory connections = (SimpleConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
+        logger.info("get info from GuacamoleConfiguration,id:"+id+",name:"+ name);
         SimpleConnection connection = new SimpleConnection(name, id, config);
         connections.putConnection(connection);
         return context;
@@ -82,9 +83,9 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
 			Connect2OpenHackathon conn = new Connect2OpenHackathon(authRequestURL);					
 			jsonString = conn.getGuacamoleJSONString(connectionID,tokenString);
 			logger.info("get guacamole config json String :" + jsonString);
-			logger.info("before transformation jsobString is :" +jsonString.substring(1, jsonString.length()-1));
 			
-			Trans2GuacdConfiguration trans = new Trans2GuacdConfiguration(jsonString.substring(1, jsonString.length()-1));
+			String finalString = jsonString.substring(1, jsonString.length()-1).replace("\\", "");
+			Trans2GuacdConfiguration trans = new Trans2GuacdConfiguration(finalString);
 			config = trans.getConfiguration();
 			
 			return config ;			
