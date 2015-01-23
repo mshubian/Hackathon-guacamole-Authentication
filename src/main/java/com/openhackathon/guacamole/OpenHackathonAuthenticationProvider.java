@@ -60,6 +60,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         String name = config.getParameter("name");
         SimpleConnectionDirectory connections = (SimpleConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
         logger.info("======================get info from GuacamoleConfiguration,id:"+id+",name:"+ name);
+        logger.info("protocal select :" + config.getProtocol() );
         SimpleConnection connection = new SimpleConnection(name, id, config);
         connections.putConnection(connection);
         return context;
