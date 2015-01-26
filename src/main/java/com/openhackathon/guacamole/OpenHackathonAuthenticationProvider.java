@@ -74,6 +74,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         }
         
         String name = config.getParameter("name");
+        logger.info(" CLASS is "+ context.getRootConnectionGroup().getConnectionDirectory().getClass().getName());
         OpenHackathonConnectionDirectory connections = (OpenHackathonConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
         logger.info("======================get info from GuacamoleConfiguration name:"+ name);
         logger.info("protocal select :" + config.getProtocol() );
