@@ -60,7 +60,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
             return null;
         
         // Return user context restricted to authorized configs
-        return new OpenHackathonUserContext(credentials.getUsername(), configs);
+        return new OpenHackathonUserContext(configs);
 
     }
     
