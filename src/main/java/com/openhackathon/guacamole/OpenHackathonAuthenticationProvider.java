@@ -5,15 +5,22 @@ import org.glyptodon.guacamole.net.auth.Credentials;
 import org.glyptodon.guacamole.net.auth.UserContext;
 import org.glyptodon.guacamole.net.auth.simple.SimpleAuthenticationProvider;
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnection;
-import org.glyptodon.guacamole.net.auth.simple.SimpleConnectionDirectory;
+import org.glyptodon.guacamole.net.auth.simple.SimpleUserContext;
 import org.glyptodon.guacamole.properties.StringGuacamoleProperty;
 import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
+import org.glyptodon.guacamole.token.StandardTokens;
+import org.glyptodon.guacamole.token.TokenFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
+
+
+
+import com.openhackathon.guacamole.OpenHackathonConnectionDirectory;
+import com.openhackathon.guacamole.OpenHackathonUserContext;
 
 import java.util.*;
 
@@ -23,7 +30,6 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
 	private Logger logger = LoggerFactory.getLogger(OpenHackathonAuthenticationProvider.class.getClass());
 	
     private static final StringGuacamoleProperty AUTH_REQUEST_URL = new StringGuacamoleProperty() {
-
         @Override
         public String getName() { return "auth-request-url"; }
     };
@@ -48,6 +54,32 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         return configs;
     }
 
+    
+    @Override
+    public UserContext getUserContext(Credentials credentials)
+            throws GuacamoleException {
+
+        // Get configurations
+        Map<String, GuacamoleConfiguration> configs =
+                getAuthorizedConfigurations(credentials);
+
+        // Return as unauthorized if not authorized to retrieve configs
+        if (configs == null)
+            return null;
+
+        // Build credential TokenFilter
+        TokenFilter tokenFilter = new TokenFilter();
+        StandardTokens.addStandardTokens(tokenFilter, credentials);
+        
+        // Filter each configuration
+        for (GuacamoleConfiguration config : configs.values())
+            tokenFilter.filterValues(config.getParameters());
+        
+        // Return user context restricted to authorized configs
+        return new OpenHackathonUserContext(credentials.getUsername(), configs);
+
+    }
+    
     @Override
     public UserContext updateUserContext(UserContext context, Credentials credentials) throws GuacamoleException {
         HttpServletRequest request = credentials.getRequest();
@@ -56,12 +88,12 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         if (config == null) {
             return null;
         }
-        String id = config.getConnectionID();
+        
         String name = config.getParameter("name");
-        SimpleConnectionDirectory connections = (SimpleConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
-        logger.info("======================get info from GuacamoleConfiguration,id:"+id+",name:"+ name);
+        OpenHackathonConnectionDirectory connections = (OpenHackathonConnectionDirectory) context.getRootConnectionGroup().getConnectionDirectory();
+        logger.info("======================get info from GuacamoleConfiguration name:"+ name);
         logger.info("protocal select :" + config.getProtocol() );
-        SimpleConnection connection = new SimpleConnection(name, id, config);
+        SimpleConnection connection = new SimpleConnection(name, config.getProtocol(), config);
         connections.putConnection(connection);
         return context;
     }
@@ -72,7 +104,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
     	String jsonString = null;
         
         String tokenString = request.getParameter("token");
-        String connectionID = request.getParameter("id").substring(2);
+        String connectionName = request.getParameter("id").substring(2);
         logger.info("tokenString is : |" + tokenString);
                
         /*check user valid or not*/
@@ -82,7 +114,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
 			logger.info("==============================OpenHackathon guacd Auth request URL is : " + authRequestURL);
 			
 			Connect2OpenHackathon conn = new Connect2OpenHackathon(authRequestURL);					
-			jsonString = conn.getGuacamoleJSONString(connectionID,tokenString);
+			jsonString = conn.getGuacamoleJSONString(connectionName,tokenString);
 			logger.info("==============================get guacamole config json String :" + jsonString);
 			
 			String finalString = jsonString.substring(1, jsonString.length()-1).replace("\\", "");
