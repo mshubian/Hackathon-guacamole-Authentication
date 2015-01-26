@@ -12,12 +12,7 @@ import org.glyptodon.guacamole.net.auth.simple.SimpleUser;
 import org.glyptodon.guacamole.net.auth.simple.SimpleUserContext;
 import org.glyptodon.guacamole.net.auth.simple.SimpleUserDirectory;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
-
 import com.openhackathon.guacamole.OpenHackathonConnectionDirectory;
-
-
-
-
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnectionGroupDirectory;
 
 public class OpenHackathonUserContext extends SimpleUserContext {

@@ -3,7 +3,6 @@ package com.openhackathon.guacamole;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.glyptodon.guacamole.net.auth.Connection;
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnection;
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnectionDirectory;

@@ -5,7 +5,6 @@ import org.glyptodon.guacamole.net.auth.Credentials;
 import org.glyptodon.guacamole.net.auth.UserContext;
 import org.glyptodon.guacamole.net.auth.simple.SimpleAuthenticationProvider;
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnection;
-import org.glyptodon.guacamole.net.auth.simple.SimpleUserContext;
 import org.glyptodon.guacamole.properties.StringGuacamoleProperty;
 import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
@@ -13,12 +12,7 @@ import org.glyptodon.guacamole.token.StandardTokens;
 import org.glyptodon.guacamole.token.TokenFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.servlet.http.HttpServletRequest;
-
-
-
-
 import com.openhackathon.guacamole.OpenHackathonConnectionDirectory;
 import com.openhackathon.guacamole.OpenHackathonUserContext;
 
