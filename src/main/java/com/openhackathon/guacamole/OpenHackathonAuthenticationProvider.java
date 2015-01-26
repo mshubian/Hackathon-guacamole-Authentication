@@ -8,8 +8,7 @@ import org.glyptodon.guacamole.net.auth.simple.SimpleConnection;
 import org.glyptodon.guacamole.properties.StringGuacamoleProperty;
 import org.glyptodon.guacamole.properties.GuacamoleProperties;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
-import org.glyptodon.guacamole.token.StandardTokens;
-import org.glyptodon.guacamole.token.TokenFilter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
@@ -54,20 +53,11 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
             throws GuacamoleException {
 
         // Get configurations
-        Map<String, GuacamoleConfiguration> configs =
-                getAuthorizedConfigurations(credentials);
+        Map<String, GuacamoleConfiguration> configs = getAuthorizedConfigurations(credentials);
 
         // Return as unauthorized if not authorized to retrieve configs
         if (configs == null)
             return null;
-
-        // Build credential TokenFilter
-        TokenFilter tokenFilter = new TokenFilter();
-        StandardTokens.addStandardTokens(tokenFilter, credentials);
-        
-        // Filter each configuration
-        for (GuacamoleConfiguration config : configs.values())
-            tokenFilter.filterValues(config.getParameters());
         
         // Return user context restricted to authorized configs
         return new OpenHackathonUserContext(credentials.getUsername(), configs);
