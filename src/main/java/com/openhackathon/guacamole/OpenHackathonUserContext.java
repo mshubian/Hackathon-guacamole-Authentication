@@ -4,6 +4,7 @@ package com.openhackathon.guacamole;
 
 import java.util.Collections;
 import java.util.Map;
+
 import org.glyptodon.guacamole.GuacamoleException;
 import org.glyptodon.guacamole.net.auth.ConnectionGroup;
 import org.glyptodon.guacamole.net.auth.Directory;
@@ -12,6 +13,7 @@ import org.glyptodon.guacamole.net.auth.UserContext;
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnectionGroup;
 import org.glyptodon.guacamole.net.auth.simple.SimpleConnectionGroupDirectory;
 import org.glyptodon.guacamole.net.auth.simple.SimpleUser;
+import org.glyptodon.guacamole.net.auth.simple.SimpleUserContext;
 import org.glyptodon.guacamole.net.auth.simple.SimpleUserDirectory;
 import org.glyptodon.guacamole.protocol.GuacamoleConfiguration;
 
