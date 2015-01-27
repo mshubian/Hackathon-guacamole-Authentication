@@ -43,7 +43,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
             return null;
         }
         Map<String, GuacamoleConfiguration> configs = new HashMap<String, GuacamoleConfiguration>();
-        configs.put(config.getConnectionID(), config);
+        configs.put(config.getParameter("name"), config);
         logger.debug("======================put configuration into The getAuthorizedConfigurations");
         return configs;
     }
