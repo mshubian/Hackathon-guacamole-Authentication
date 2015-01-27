@@ -88,7 +88,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
 			
             Connect2OpenHackathon conn = new Connect2OpenHackathon(authRequestURL);
             jsonString = conn.getGuacamoleJSONString(connectionName,tokenString);
-            logger.debug("==============================get guacamole config json String :" + jsonString);
+            logger.info("get guacamole config json String :" + jsonString);
 			
             String finalString = jsonString.substring(1, jsonString.length()-1).replace("\\", "");
             Trans2GuacdConfiguration trans = new Trans2GuacdConfiguration(finalString);
