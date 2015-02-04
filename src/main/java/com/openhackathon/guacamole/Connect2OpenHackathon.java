@@ -29,8 +29,6 @@ public class Connect2OpenHackathon {
         try {
         	 url = new URL(urlString+"?id="+connectionName);
         	 
-        	 logger.info("=====================URL is" + urlString+"?id="+connectionName);
-
         	 HttpURLConnection.setFollowRedirects(false);
         	 conn = (HttpURLConnection) url.openConnection();       	 
              conn.setRequestMethod("GET");  

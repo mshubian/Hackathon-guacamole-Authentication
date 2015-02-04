@@ -73,10 +73,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
         
         String tokenString = request.getParameter("token");
         String connectionName = request.getParameter("id").substring(2);
-        
-        logger.info("tokenString is : |" + tokenString);
-        
-               
+
         /*check user valid or not*/
         try {
             
@@ -86,14 +83,13 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
             Connect2OpenHackathon conn = new Connect2OpenHackathon(authRequestURL);
             jsonString = conn.getGuacamoleJSONString(connectionName,tokenString);
             logger.info("get guacamole config json String :" + jsonString);
-			
-            //String finalString = jsonString.substring(1, jsonString.length()-1).replace("\\", "");
+            
             Trans2GuacdConfiguration trans = new Trans2GuacdConfiguration(jsonString);
             config = trans.getConfiguration();
-			
             return config ;
+            
         } catch (Exception e) {
-            logger.error("=============================Exception when connect with open-hackathon to check User login");
+            logger.error("=============================Exception when connect with open-hackathon to get guacamole configuration values");
             e.printStackTrace();
             return null;
         }

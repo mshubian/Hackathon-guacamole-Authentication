@@ -28,15 +28,16 @@ public class Trans2GuacdConfiguration {
 			
 			JSONObject json = new JSONObject(jsonString.replace("\\", ""));
 			configuration = new GuacamoleConfiguration();
-			configuration.setProtocol(json.getString("protocol"));
+			
+/*			configuration.setProtocol(json.getString("protocol"));
 			configuration.setParameter("name", json.getString("name"));
 			configuration.setParameter("username", json.getString("username"));
 			configuration.setParameter("password", json.getString("password"));
 			configuration.setParameter("hostname", json.getString("hostname"));
-			configuration.setParameter("port", json.getString("port"));
+			configuration.setParameter("port", json.getString("port"));*/
 
             /*Automlly set configuration value*/
-/*			Iterator<String> keys = json.keys(); 
+			Iterator<String> keys = json.keys(); 
             while(keys.hasNext()){
                 String key = keys.next();
                 logger.info("key:value is || " + key + ":" + json.getString("protocol"));
@@ -46,7 +47,7 @@ public class Trans2GuacdConfiguration {
                     configuration.setParameter(key, json.getString(key));
                 }
             }
-*/
+
 		} catch (Exception e) {
 			logger.error("==================Failed when transfor jsonString to GuacamoleConfiguation  ");
 			configuration = new GuacamoleConfiguration();
