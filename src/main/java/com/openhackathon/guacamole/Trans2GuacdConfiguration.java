@@ -40,9 +40,7 @@ public class Trans2GuacdConfiguration {
             /*Automlly set configuration value*/
             while(keys.hasNext()){
                 String key = keys.next();
-                if (key.equals("displayname")) {
-                    continue;
-                }
+                logger.info("key:value is || " + key + ":" + json.getString("protocol"));
                 if (key.equals("protocol")) {
                     configuration.setProtocol(json.getString("protocol"));
                 }else {

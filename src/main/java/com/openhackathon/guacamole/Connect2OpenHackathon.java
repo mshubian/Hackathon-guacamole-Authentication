@@ -53,7 +53,7 @@ public class Connect2OpenHackathon {
              }
             
         } catch (Exception e) {
-        	logger.error("Exception when connect with OSSLAB to check User Cookies BBB");
+        	logger.error("Exception when connect with hacakathon to check User");
             e.printStackTrace();
         }
         finally {
