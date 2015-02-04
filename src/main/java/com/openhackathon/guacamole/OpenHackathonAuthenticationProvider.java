@@ -20,9 +20,9 @@ import java.util.*;
 
 
 public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationProvider {
-	
+
     private Logger logger = LoggerFactory.getLogger(OpenHackathonAuthenticationProvider.class.getClass());
-	
+
     private static final StringGuacamoleProperty AUTH_REQUEST_URL = new StringGuacamoleProperty() {
         @Override
         public String getName() { return "auth-request-url"; }
@@ -31,7 +31,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
     /*constructed functions*/
     
     public OpenHackathonAuthenticationProvider() {
-    	logger.debug("==============================gucamole authentication jar log init =============================================");
+        logger.debug("==============================gucamole authentication jar log init =============================================");
     }
 
     @Override
@@ -67,7 +67,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
     }
 
     private GuacamoleConfiguration getGuacamoleConfiguration(HttpServletRequest request) throws GuacamoleException {
-    	
+
         GuacamoleConfiguration config ;
         String jsonString = null;
         
@@ -79,7 +79,7 @@ public class OpenHackathonAuthenticationProvider extends SimpleAuthenticationPro
             
             String authRequestURL = GuacamoleProperties.getProperty(AUTH_REQUEST_URL);
             logger.info("==============================OpenHackathon guacd Auth request URL is : " + authRequestURL);
-			
+
             Connect2OpenHackathon conn = new Connect2OpenHackathon(authRequestURL);
             jsonString = conn.getGuacamoleJSONString(connectionName,tokenString);
             logger.info("get guacamole config json String :" + jsonString);
